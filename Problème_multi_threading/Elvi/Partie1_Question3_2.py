@@ -16,31 +16,31 @@ class Functions():
         self.x=x
         
     def __dir__(self):
-        return['f1','f2','f3']
+        return['f1','f2','f3','f4']
     
     def f1(self):
         if 0<self.x<100:
             return (self.x+3)/2 
         else:
-            raise ValueNotInRange(number)
+            return ValueNotInRange(number)
     
     def f2(self):
         if 0<self.x<100:  
             return self.x 
         else:
-            raise ValueNotInRange(number)
+            return ValueNotInRange(number)
     
     def f3(self):
         if 0<self.x<100:            
             return self.x+5 
         else:
-            raise ValueNotInRange(number)
+            return ValueNotInRange(number)
     
     def f4(self):
         if not self.x==0:
             return 100/self.x
         else:
-            raise ValueZero(self.x)
+            return ValueZero(self.x)
 
 
   
@@ -53,7 +53,7 @@ class Functions():
 #         return result
 # =============================================================================
 # Generalization:
-        values=[self.f1(),self.f2(),self.f3()]
+        values=[self.f1(),self.f2(),self.f3(),self.f4()]
         keys=[i for i in dir(Functions(self.x)) if not i.startswith("__")] #ok
         init_dico=dict(zip(keys,values))
         
