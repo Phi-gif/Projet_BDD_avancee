@@ -44,7 +44,7 @@ class Functions():
 
 
 class ValueTooLarge(Exception):
-    def __init__(self,number,message="Nous cherchons un résultat inférieur à 100, en choisir une autre!"):
+    def __init__(self,number,message="Nous cherchons un résultat inférieur à 100, svp choisir une autre expression!"):
         self.number=number
         self.message=message
         super().__init__(self.message)
