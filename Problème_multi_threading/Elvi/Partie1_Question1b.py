@@ -18,10 +18,14 @@ class Functions():
         pass
 
     def run_functions(self,instructions):
+        dico={}
         
-        chosen_function=random.choice(instructions)
-        value=eval(chosen_function)
-        return (chosen_function,value)
+        random.shuffle(instructions)
+        n=len(instructions)
+        for i in range(n):
+            chosen_function=instructions[i]
+            dico[chosen_function]=eval(chosen_function)
+        return dico
         
                     
 

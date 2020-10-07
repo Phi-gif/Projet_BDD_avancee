@@ -25,22 +25,25 @@ class Functions():
         return instruction_list
         
   
+    
     def run_functions(self):
+        dico={}
+        instruction_list=Functions.read_file(self)
+        random.shuffle(instruction_list)
         
-        chosen_function=random.choice(Functions.read_file(self))
-        value=eval(chosen_function)
-        return (chosen_function,value)
-        
-                    
+        n=len(instruction_list)
+        for i in range(n):
+            chosen_function=instruction_list[i]
+            dico[chosen_function]=eval(chosen_function)
+            
+        return dico
 
 
 if __name__=='__main__':
-    
-
-#    instruction_list=['1+2','2+10','3**2','4+500','3/30']
-    
+        
     f=Functions()
     result=f.run_functions()
+    instruct=f.read_file()
     print(result)
     
 
