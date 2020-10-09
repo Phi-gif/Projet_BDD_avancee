@@ -29,25 +29,24 @@ class Functions():
         dico={}
         instruction_list=Functions.read_file(self)
         random.shuffle(instruction_list)
-        
+       
         n=len(instruction_list)
         for i in range(n):
             chosen_function=instruction_list[i]
-
-            if eval(chosen_function)>100:
-                dico[chosen_function]=ValueTooLarge(self)
-            else:
+            try:
                 dico[chosen_function]=eval(chosen_function)
+            except Exception as e:
+                dico[chosen_function]=e
 
         return dico
             
 
 
-class ValueTooLarge(Exception):
-    def __init__(self,number,message="Nous cherchons un résultat inférieur à 100, svp choisir une autre expression!"):
-        self.number=number
-        self.message=message
-        super().__init__(self.message)
+#class ValueTooLarge(Exception):
+#    def __init__(self,number,message="Nous cherchons un résultat inférieur à 100, svp choisir une autre expression!"):
+#        self.number=number
+#        self.message=message
+#        super().__init__(self.message)
 
 
 
