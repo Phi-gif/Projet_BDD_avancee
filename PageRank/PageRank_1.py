@@ -40,7 +40,7 @@ class PageRank(MRJob):
     
             total_neighbours=len(adjacent_list) 
     
-            total_nodes=self.PageRank.comptage(self,node) # WRONG FIND ANOTHER WAY
+            total_nodes=len(node) #ok
     
             initial_pagerank=1/total_nodes # N.PageRank
             p=initial_pagerank/total_neighbours # N.PageRank/|N.AdjacencyList|
