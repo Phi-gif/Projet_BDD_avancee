@@ -86,7 +86,6 @@ class PageRank(MRJob):
             s=np.sum(pageranks)
         
         # Finding w(k+1)j :
-        """ --- QUESTION: sum(counts)"""
         new_pagerank=c/total_nodes+ (1-c)*s
         #for n in flat_list_neighbours:
             #yield n, new_pagerank/len(flat_list_neighbours) # number of pageranks for each neighbour
