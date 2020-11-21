@@ -40,7 +40,7 @@ class PageRank(MRJob):
     
             total_neighbours=len(adjacent_list) 
     
-            total_nodes=len(node) #ok
+            total_nodes=len(node) # ok
     
             initial_pagerank=1/total_nodes # N.PageRank
             p=initial_pagerank/total_neighbours # N.PageRank/|N.AdjacencyList|
@@ -60,10 +60,11 @@ class PageRank(MRJob):
             
             total_nodes=self.PageRank.comptage(self) # WRONG : FIND ANOTHER WAY
             
-            list_p=list(p)
+            list_p=list(p) #list of p where p can be float or list 
+            
             list_neighbours=[]
             list_pageranks=[] # all the pageranks of each node
-            for items in list_pagerank:
+            for items in list_p:
                 if isinstance(items,list): #si nous avons adjacent_list - la liste des neighbours
                     list_neighbours.append(items) # ATTENTION LISTE 2D - LISTE DE LISTE - A CONVERTIR EN 1D?
                 if isinstance(items, float): # si nous avons un float, alors c'est p, c'est le pagerank de notre noeud/site. Recover graph structure.
@@ -90,7 +91,7 @@ class PageRank(MRJob):
 
 
     def steps(self):
-        N=10 # nombre d'itérations
+        N=10 # nombre d'itérations : QUESTION: OU UTILISER?
         return [MRStep(mapper=self.mapper,
         reducer=self.reducer)]
 
