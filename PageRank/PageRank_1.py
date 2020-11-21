@@ -18,7 +18,7 @@ WORD_RE = re.compile(r"[\w]+")
 (node, adjacent_list) = line.split('\t') 
 total_nodes=len(node)
 
-# page rank definitions:
+# page rank abbreviations:
 # w0 or P(0) = initial pagerank = 1/total number of nodes in graph
 # wj or P(j) = pagerank P of page j
 # nj or C(j) = number of pages that cite page j = number of links on page j
