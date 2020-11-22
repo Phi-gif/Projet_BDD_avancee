@@ -80,8 +80,9 @@ class PageRank(MRJob):
                     flat_list_neighbours.append(item)
     
             # somme de N.PageRank/|N.AdjacencyList| ou wkj/nj
+            s=0
             for pageranks in list_pageranks:
-                s=np.sum(pageranks)
+                s+=pageranks
             
             # Finding w(k+1)j :
             new_pagerank=c/total_nodes+ (1-c)*s
