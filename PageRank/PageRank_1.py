@@ -44,12 +44,14 @@ class PageRank(MRJob):
     
             initial_pagerank=1/total_nodes # N.PageRank
             p=initial_pagerank/total_neighbours # N.PageRank/|N.AdjacencyList|
-    
+            
+            yield node,adjacent_list#  Pass along graph structure, adjacent_list is list instance
+            
             for l in adjacent_list: # yields each neighbour l, and the page rank w(j) 
                 yield l, p # Pass PageRank mass to neighbors, p is float
                     
                 
-            yield node,adjacent_list#  Pass along graph structure, adjacent_list is list instance
+            
         
     def reducer(self, node ,p ):    
             """ yield 2 things:
