@@ -14,7 +14,10 @@ async def send(message,addr,port):
     writer.close()
 
 if __name__ == '__main__':
-    message = ["où?","qui?","quand?"]
+    message = ["où?","qui?","quand?","Bonjour","qui?","ou?","quoi?","Bonsoir"]
     for number in range(161,184):
         for i in message:
-            client  = asyncio.run(send(i,f"192.168.123.{number}",1234))
+            try:
+                client  = asyncio.run(send(i,f"192.168.123.{number}",1234))
+            except error as e:
+                pass
