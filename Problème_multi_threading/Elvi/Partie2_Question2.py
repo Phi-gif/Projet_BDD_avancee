@@ -19,68 +19,110 @@ import random
 
 
 
-class Functions(threading.Thread):
-    mon_verrou=threading.Lock()
-    count=0
-    
+class Count(threading.Thread):
+    count=True
+
     def __init__(self):
         threading.Thread.__init__(self)
 
-       
-        
-    def read_file(self):
-        f=open('liste_fonctions.txt','r')
-        instruction_list=[]
-        for lines in f:
-            instruction_list.append(lines.strip('\n'))
-        f.close()
-        return instruction_list
-        
-  
-    
-    def run(self):
-        dico={}
-        instruction_list=Functions.read_file(self)
-        
-        n=len(instruction_list)
+    # pris de ce qui a été fait en classe
+    # on utilise cette fonction pour connaitre le nombre de pages active
+    def run_count(self):
+        last = -1
+        while Count.count:
+            nb = threading.active_count()
+        if last!=nb :
+            print(f"{nb} tâche(s) active(s)")
+            last = nb
 
-        with Functions.mon_verrou:
-            #print('verrou mis')
-            for i in range(n):
-                #time.sleep(0.01)
-                chosen_function=instruction_list[i]
-                try:
-                    dico[chosen_function]=eval(chosen_function)
-                except Exception as e:
-                    dico[chosen_function]=e
-                Functions.count+=1
-                print(f'{Functions.count}: Thread {threading.current_thread().name} has ID: {threading.current_thread().ident} ')
-                
-                
-        return dico
+
+class Functions(threading.Thread):
+
+    # création de 2 verrous globaux
+    verrou1=threading.Lock()
+    verrou2=threading.Lock()
+
+    instruction_list=[] # liste globale
+    dico={} # dictionnaire global
+
+    def __init__(self,num_processeur):
+        threading.Thread.__init__(self)
+        self.num_processeur=num_processeur # pour connaitre le nombre de processeurs
+
+
+    def run(self):
+        n=len(Functions.instruction_list)
+        for i in range(n):
+            chosen_function=Functions.instruction_list[i]
+
+            try: 
+                Functions.verrou2.acquire()
+                Functions.dico[chosen_function]=(eval(chosen_function),self.num_processeur)
+                Functions.verrou2.release()
+            except Exception as e:
+                Functions.verrou2.acquire()
+                Functions.dico[chosen_function]=(f"{e.__class__.__name__} : {e}",self.num_processeur)
+                Functions.verrou2.release()
+
+
+    # def run(self):
+    #     f=open('liste_fonctions.txt','r')
+    #     instruction_list=[]
+    #     for lines in f:
+    #         instruction_list.append(lines.strip('\n'))
+    #     f.close()
+
+    #     dico={}
+
+    #     n=len(instruction_list)
+        
+    #     for i in range(n):
+
+    #         chosen_function=instruction_list[i]
+
+    
+    #         try:
+    #             Functions.mon_verrou2.acquire() # je met mon evaluation dans la fonction
+    #             dico[chosen_function]=eval(chosen_function)
+    #             print('numero_processeur : ', self.num_processeur)
+    #             Functions.mon_verrou2.release()
+    #         except Exception as e:
+    #             Functions.mon_verrou2.acquire()
+    #             dico[chosen_function]=e
+    #             Functions.mon_verrou2.release()
+    #         Functions.count+=1
+    #         print(f'{Functions.count}: Thread {threading.current_thread().name} has ID: {threading.current_thread().ident} ')
+   
+    #    return dico
 
 
 if __name__=='__main__':
     
-    
-    f=Functions()
-    instruct=f.read_file()
-    
-    threads=[]
-    
-    # on ajoute les threads dans une liste
-    for items in range(20):
-        t=threading.Thread(target=f.run)
-        # to return number of threads that are active
-        print(f'nombre de tâches actives : {threading.active_count()}') #
-        threads.append(t)
-        t.start()
-        
+    data=open('liste_fonctions.txt','r')
+    for lines in data:
+        Functions.instruction_list.append(lines.strip('\n'))
+    data.close()
 
-    for thread in threads:
+    threads_active=[]
+    n=5
+    # on ajoute les threads dans une liste
+    for i in range(n):
+        f=Functions(i)
+        #t=threading.Thread(target=f.run)
+        threads_active.append(f)
+   
+    for thread in threads_active:
+        thread.start()
+
+    for thread in threads_active:
         thread.join()
 
     print(f"resultat : {f.run()}")
     print ("fin")
    
 
+    for instruct in Functions.dico.keys():
+        print(f"eval({instruct})={Functions.dico[instruct][0]}, processeur = ")
+
+    
+    print(Functions.dico.items())
