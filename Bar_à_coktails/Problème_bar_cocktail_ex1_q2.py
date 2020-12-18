@@ -5,15 +5,14 @@ class Accessoire(list):
 
 class Pic(Accessoire):
     """ Un pic peut embrocher un post-it par-dessus les post-it déjà présents
-        et libérer le dernier embroché. (le postit représentant une commande à chaque fois contrairement 
-        à la question précédente) """
+        et libérer le dernier embroché. """
     def embrocher(self,commande):
         print(f'[Pic] postit {commande} embroché')
         self.append(commande)
 
     def liberer(self, postit):
         print(f'[Pic] postit {postit} libéré')
-        #return(self)
+        
 
 class Bar(Accessoire):
     """ Un bar peut recevoir des plateaux, et évacuer le dernier reçu """
@@ -23,7 +22,6 @@ class Bar(Accessoire):
 
     def evacuer(self,commande):
         print(f'[Bar] {commande} évacuée')
-        #return(self)
 
 class Barman:
 
@@ -34,12 +32,12 @@ class Barman:
 
     def preparer(self):
         """ Prend un post-it, prépare la commande et la dépose sur le bar. """
-        plateau = self.pic
-        for i in plateau :
-            self.pic.liberer(i)
-            print(f'[Barman] Je commence la fabrication de {i}')
-            print(f'[Barman] Je termine la fabrication de {i}')
-            self.bar.recevoir(i)
+        commandes = [self.pic[k] for k in range(len(self.pic)-1,-1,-1)]
+        for commande in commandes :
+            self.pic.liberer(commande)
+            print(f'[Barman] Je commence la fabrication de {commande}')
+            print(f'[Barman] Je termine la fabrication de {commande}')
+            self.bar.recevoir(commande)
             
         
 
@@ -63,10 +61,10 @@ class Serveur:
 
     def servir(self):
         """ Prend un plateau sur le bar. """
-        commandes = self.bar
-        for commande in commandes:
-            self.bar.evacuer(commande)
-            print(f'[Serveur] Je sers {commande}')
+        plateaux = [self.bar[k] for k in range(len(self.bar)-1,-1,-1)]
+        for plateau in plateaux:
+            self.bar.evacuer(plateau)
+            print(f'[Serveur] Je sers {plateau}')
 
   
 #Programme principal
