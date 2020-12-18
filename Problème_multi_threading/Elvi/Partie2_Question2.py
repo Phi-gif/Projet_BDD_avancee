@@ -5,7 +5,7 @@ Created on Wed Sep 30 14:14:51 2020
 
 @author: elvinagovendasamy
 """
-# IL FAUT METTRE UN COUNT POUR CONNAITRE L'ORDRE
+
 
 # =============================================================================
 # Question 2

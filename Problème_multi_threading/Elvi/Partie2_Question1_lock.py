@@ -52,13 +52,15 @@ class Functions(threading.Thread):
                 
         return(dico)
 
+    
+
 
 if __name__=='__main__':
     
     
     f=Functions()
     instruct=f.read_file()
-    
+
     threads=[]
     
     # on ajoute les threads dans une liste
@@ -68,11 +70,14 @@ if __name__=='__main__':
         t.start()
         #print(f'nombre de tâches actives : {threading.active_count}')
 
-
+        
     
 
     for thread in threads:
         thread.join()
+        
+    
+   
 
     print(f"resultat : {f.run()}")
     
