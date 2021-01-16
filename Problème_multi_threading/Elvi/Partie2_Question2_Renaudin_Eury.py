@@ -37,47 +37,47 @@ class Functions(threading.Thread):
     mon_verrou1=threading.Lock()
     instruction_list=[] # liste globale
     dico={} # dictionnaire global
-
+    k=1
     def __init__(self,numero_processeur):
         threading.Thread.__init__(self)
         self.numero_processeur=numero_processeur
 
     def run(self):
-        for i in range(len(Functions.instruction_list)):
+        while len(Functions.instruction_list)!=0:
+            
             Functions.mon_verrou.acquire() # premier verrou
-            if len(Functions.instruction_list)!=0:
-                chosen_function=Functions.instruction_list[i]
-                #print(chosen_function)
+            i=random.randint(0, len(Functions.instruction_list)-1)
+            chosen_function=Functions.instruction_list[i]
+            Functions.instruction_list.pop(i) # on met le pop pour ajuster la taille de la liste
             Functions.mon_verrou.release()
             
-            if chosen_function != None:
-                try:
-                    result=eval(chosen_function)
-                    Functions.mon_verrou1.acquire() # deuxieme verrou
-                    Functions.dico[chosen_function]=(result,self.numero_processeur)
-                    # Peut-être pas si nécessaire, mais intéressant comme info.
-                    print(f"Thread {threading.current_thread().name} a un ID: {threading.current_thread().ident}")
-                    #print(Functions.dico.keys())
-                    Functions.mon_verrou1.release()
-                
-                except Exception as e:
-                    Functions.dico[chosen_function]=(e,self.numero_processeur)
-            
+            Functions.mon_verrou1.acquire() # deuxieme verrou
+            try:
+                result=eval(chosen_function)
+                Functions.dico[chosen_function]=(result,self.numero_processeur,Functions.k)
+                print(f"{Functions.k} : Résultat de l'expression {chosen_function} = {result}, le numéro du processeur est {self.numero_processeur} ")
+                Functions.k+=1
+            except Exception as e:
+                Functions.dico[chosen_function]=(e,self.numero_processeur,Functions.k)
+            Functions.mon_verrou1.release()
     
 
 if __name__=='__main__':
-
-
+    
     count_=Compte()
-    count_.start() # on commence par compter le nombre de tâches
+    count_.start() # on commence par compter le nombre de tâches: 
+    # À partir d'un certain nombre de tâches actives on n'affiche pas les tâches actives
 
-    data=open('liste_fonctions.txt','r')
+    data=open('liste_fonctionsA.txt','r')
     for lines in data:
         Functions.instruction_list.append(lines.strip('\n'))
+        Functions.dico[lines.strip('\n')]=0
     data.close()
 
+    
+
     threads_active=[]
-    n=8
+    n=int(input('Nombre de processeurs : '))
     for i in range(1,n+1):  
         f=Functions(i)
         threads_active.append(f) # On ajoute les threads dans une liste
@@ -85,11 +85,14 @@ if __name__=='__main__':
         thread.start()
     for thread in threads_active:
         thread.join()
+        
     
     
-    for items in Functions.dico.keys():
-        print(f"Résultat de l'expression {items} = {Functions.dico[items][0]}, le numéro du processeur est {Functions.dico[items][1]}")
-
+    
+    #for items in Functions.dico.keys():
+        #print(f"Résultat de l'expression {items} = {Functions.dico[items][0]}, le numéro du processeur est {Functions.dico[items][1]},ID: {threading.current_thread().ident}, nom Thread: {threading.current_thread().name}")
+    
+    #print(Functions.dico)
 
     print(f"Nombre d'instructions évaluées: {len(Functions.dico)}")
     print('End')
