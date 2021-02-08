@@ -31,7 +31,7 @@ class PageRank(MRJob):
             PageRank.dico_nj.setdefault(identifiant,0)
         for identifiant in liste_nodes2:
             PageRank.dico_nj.setdefault(identifiant,0)
-        PageRank.total_nodes = len(PageRank.dico_nj) #ça marche
+        PageRank.total_nodes = len(PageRank.dico_nj) 
         yield 'in', (j,i)
         yield 'out', (i,j)
 
@@ -63,7 +63,7 @@ class PageRank(MRJob):
     def mapper_PageRank(self, i, node):
             
         adjacent_list, pagerank = node
-        total_neighbours=len(adjacent_list)
+        total_neighbours=len(adjacent_list) #ni
         
         p=pagerank/total_neighbours
 
