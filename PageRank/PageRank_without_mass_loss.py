@@ -72,7 +72,7 @@ class PageRank(MRJob):
     def mapper_PageRank(self, i, node):
             
         adjacent_list, pagerank = node
-        total_neighbours=len(adjacent_list) 
+        total_neighbours=len(adjacent_list) #ni 
 
         #pour traiter les pages qui ne citent personne (mass_loss)
         if adjacent_list[0] == []:
