@@ -1,3 +1,3 @@
 # Projet_BDD_avancee
  
-Multithreading, programmation parallèle (asyncio)
+Multithreading, programmation parallèle (asyncio), PageRank
